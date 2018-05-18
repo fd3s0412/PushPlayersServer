@@ -75,6 +75,9 @@ wss.on('connection', function(connection) {
 					serverData.positionX = hostData.positionX;
 					serverData.positionY = hostData.positionY;
 					serverData.positionZ = hostData.positionZ;
+					serverData.velocityX = hostData.velocityX;
+					serverData.velocityY = hostData.velocityY;
+					serverData.velocityZ = hostData.velocityZ;
 					serverData.isDelete = (hostData.positionY < -5);
 				}
 				var obj = getPlayerList();
