@@ -9,6 +9,7 @@ var server = http.createServer(app);
 var wss = new WebSocketServer({server:server});
 
 var browser = null;
+var hostConnection = null;
 var connectionList = [];
 var playerInfoMap = {};
 var socketDataListWrapper = {
@@ -69,6 +70,7 @@ wss.on('connection', function(connection) {
 			// ホストでの計算結果を受け付ける処理.
 			// ----------------------------------------------------------------------
 			case "sendHostInfo":
+				if (!hostConnection) hostConnection = connection;
 				for (var i = 0; i < recieveData.playerList.length; i++) {
 					var hostData = recieveData.playerList[i];
 					var serverData = playerInfoMap[hostData.playerId];
@@ -118,6 +120,12 @@ function removeConnection(connection) {
 	for (var i = connectionList.length - 1; i >= 0; i--) {
 		if (connectionList[i] === connection) {
 			connectionList.splice(i, 1);
+		}
+
+		// ホスト破棄
+		if (hostConnection === connection) {
+			hostConnection = null;
+			playerInfoMap = {};
 		}
 	}
 }
